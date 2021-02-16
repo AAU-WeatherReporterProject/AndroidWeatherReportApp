@@ -9,18 +9,27 @@ import com.android.volley.toolbox.Volley
 import com.google.gson.Gson
 import org.json.JSONArray
 import org.json.JSONObject
+import java.util.concurrent.CompletableFuture
 
 private val GSON = Gson()
 
 class VolleyWeatherRestService(context: Context) : WeatherRestService {
     private val queue = Volley.newRequestQueue(context)
 
-    override fun requestLocations(onSuccess: (dataPoints: List<MeasurementPoint>) -> Unit) {
-        requestArray(buildMeasurementUrl(), MeasurementPoint::class.java, onSuccess)
+    override fun requestLocations(): CompletableFuture<List<MeasurementPoint>> {
+        val future = CompletableFuture<List<MeasurementPoint>>()
+
+        requestArray(buildMeasurementUrl(), MeasurementPoint::class.java, future::complete, future::completeExceptionally)
+
+        return future
     }
 
-    override fun requestDataPoints(key: String, onSuccess: (dataPoints: List<TemperatureMeasurement>) -> Unit) {
-        requestArray(dataPointsPath(key), TemperatureMeasurement::class.java, onSuccess, {println(it)})
+    override fun requestDataPoints(key: String): CompletableFuture<List<TemperatureMeasurement>> {
+        val future = CompletableFuture<List<TemperatureMeasurement>>()
+
+        requestArray(dataPointsPath(key), TemperatureMeasurement::class.java, future::complete, future::completeExceptionally)
+
+        return future
     }
 
     private fun <T> requestArray(uri: Uri, clazz: Class<T>, onSuccess: (results: List<T>) -> Unit, onError: ErrorListener? = null) {

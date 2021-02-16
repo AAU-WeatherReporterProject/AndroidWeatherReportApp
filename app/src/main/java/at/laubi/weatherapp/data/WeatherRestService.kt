@@ -1,6 +1,8 @@
 package at.laubi.weatherapp.data
 
+import java.util.concurrent.CompletableFuture
+
 interface WeatherRestService {
-    fun requestLocations(onSuccess: (dataPoints: List<MeasurementPoint>) -> Unit)
-    fun requestDataPoints(key: String, onSuccess: (dataPoints: List<TemperatureMeasurement>) -> Unit)
+    fun requestLocations(): CompletableFuture<List<MeasurementPoint>>
+    fun requestDataPoints(key: String): CompletableFuture<List<TemperatureMeasurement>>
 }
