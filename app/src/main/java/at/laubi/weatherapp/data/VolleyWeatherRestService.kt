@@ -12,14 +12,14 @@ import org.json.JSONObject
 
 private val GSON = Gson()
 
-class RestService(context: Context) {
+class VolleyWeatherRestService(context: Context) : WeatherRestService {
     private val queue = Volley.newRequestQueue(context)
 
-    fun requestLocations(onSuccess: (dataPoints: List<MeasurementPoint>) -> Unit) {
+    override fun requestLocations(onSuccess: (dataPoints: List<MeasurementPoint>) -> Unit) {
         requestArray(buildMeasurementUrl(), MeasurementPoint::class.java, onSuccess)
     }
 
-    fun requestDataPoints(key: String, onSuccess: (dataPoints: List<TemperatureMeasurement>) -> Unit) {
+    override fun requestDataPoints(key: String, onSuccess: (dataPoints: List<TemperatureMeasurement>) -> Unit) {
         requestArray(dataPointsPath(key), TemperatureMeasurement::class.java, onSuccess, {println(it)})
     }
 

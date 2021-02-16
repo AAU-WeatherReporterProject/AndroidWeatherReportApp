@@ -3,12 +3,11 @@ package at.laubi.weatherapp
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import at.laubi.weatherapp.data.MeasurementPoint
-import at.laubi.weatherapp.data.RestService
+import at.laubi.weatherapp.data.VolleyWeatherRestService
 import at.laubi.weatherapp.data.TemperatureMeasurement
 import java.util.ArrayList
 
@@ -19,7 +18,7 @@ class PointsActivity : AppCompatActivity() {
 
         val lv = findViewById<ListView>(R.id.measurementPoints)
 
-        val restService = RestService(applicationContext)
+        val restService = VolleyWeatherRestService(applicationContext)
 
         restService.requestLocations {
             val mapped = it.map(MeasurementPoint::location)
